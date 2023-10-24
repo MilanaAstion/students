@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.24.0"></script>
+    <title>Список студентів</title>
+
+    <!-- Style start -->
+    <style>
+      body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    #app {
+      max-width: 800px;
+      width: 100%;
+      padding: 20px;
+      background-color: #333;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      color: #fff;
+      display: block;
+    }
+
+    .search {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"] {
+      width: 97%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #333;
+    }
+
+    table th {
+      background-color: #333;
+      color: #fff;
+      font-weight: bold;
+      padding: 10px;
+      text-align: left;
+    }
+
+    table td {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+
+    table a {
+      text-decoration: none;
+      color: blue;
+      cursor: pointer;
+    }
+
+    table a:hover {
+      color: darkblue;
+    }
+
+    .btnadd {
+      background-color: blue;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 20px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+
+    .add {
+      font-size: 30px;
+      margin-bottom: 10px;
+      color: white;
+      font-weight: 100;
+    }
+
+    .pract{
+      font-size: 20px;
+      margin-bottom: 10px;
+      margin-top: 10px;
+      color: white;
+    }
+
+    .highlighted {
+            color: red;
+    }
+    .highlighted-text {
+            color: red;
+    }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <label for="search" class="search">Пошук:</label>
+        <input type="text" v-model="search" placeholder="Пошук за прізвищем">
+        <h2 class="add">Додати нового студента</h2>
+        <form @submit.prevent="addStudent">
+            <input type="text" v-model="newStudent.name" placeholder="ПІБ" required>
+            <select v-model="newStudent.group">
+                <label for="search" class="pract">Група:</label>
+                <option value="RPZ 20 1/9">RPZ 20 1/9</option>
+                <option value="RPZ 20 2/9">RPZ 20 2/9</option>
+            </select>
+            <input type="number" v-model="newStudent.mark" placeholder="Оцінка" required>
+            <label for="search" class="pract">Практика:
+                <input type="checkbox" v-model="newStudent.isDonePr">
+            </label>
+            <label for="search" class="pract">Фото:
+                <input type="url" v-model="newStudent.photo" placeholder="Фото URL">
+            </label>
+            <button type="submit" class="btnadd">Додати</button>
+        </form>
+    
+        <table>
+            <thead>
+                <tr>
+                    <th>Фото</th>
+                    <th>ПІБ</th>
+                    <th>Група</th>
+                    <th>Оцінка</th>
+                    <th>Практика</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="student in filteredStudents" :key="student._id">
+                    <td>
+                        <img v-if="student.photo" :src="student.photo" alt="Фото студента" width="50">
+                        <img v-else src="default_photo_url" alt="Фото відсутнє" width="50">
+                    </td>
+                    <td><span :class="{ 'highlighted-text': student.highlighted }">{{ student.name }}</span></td>
+                    <td><span :class="{ 'highlighted-text': student.highlighted }">{{ student.group }}</span></td>
+                    <td>{{ student.mark }}</td>
+                    <td>
+                        <input type="checkbox" v-model="student.isDonePr">
+                    </td>
+                    <td>
+                        <a @click="removeStudent(student._id)" href="#">Видалити</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+<script src="main.js"></script>
+</body>
+</html>
