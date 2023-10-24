@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <script src="https://cdn.jsdelivr.net/npm/axios@0.24.0"></script>
+    <script src="https://kit.fontawesome.com/9222919ce2.js" crossorigin="anonymous"></script>
     <title>Список студентів</title>
 
     <!-- Style start -->
@@ -78,7 +79,7 @@
       color: darkblue;
     }
 
-    .btnadd {
+    .btn {
       background-color: blue;
       color: white;
       border: none;
@@ -90,7 +91,10 @@
       margin-bottom: 15px;
     }
 
-    .add {
+    .btnupd{
+      margin-right: 10px;
+    }
+    .add, .update {
       font-size: 30px;
       margin-bottom: 10px;
       color: white;
@@ -105,66 +109,28 @@
     }
 
     .highlighted {
-            color: red;
+      color: red;
     }
+
     .highlighted-text {
-            color: red;
+      color: red;
+    }
+
+    .inputupdate{
+      width: 97%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.1); 
     }
     </style>
 </head>
 <body>
     <div id="app">
-        <label for="search" class="search">Пошук:</label>
-        <input type="text" v-model="search" placeholder="Пошук за прізвищем">
-        <h2 class="add">Додати нового студента</h2>
-        <form @submit.prevent="addStudent">
-            <input type="text" v-model="newStudent.name" placeholder="ПІБ" required>
-            <select v-model="newStudent.group">
-                <label for="search" class="pract">Група:</label>
-                <option value="RPZ 20 1/9">RPZ 20 1/9</option>
-                <option value="RPZ 20 2/9">RPZ 20 2/9</option>
-            </select>
-            <input type="number" v-model="newStudent.mark" placeholder="Оцінка" required>
-            <label for="search" class="pract">Практика:
-                <input type="checkbox" v-model="newStudent.isDonePr">
-            </label>
-            <label for="search" class="pract">Фото:
-                <input type="url" v-model="newStudent.photo" placeholder="Фото URL">
-            </label>
-            <button type="submit" class="btnadd">Додати</button>
-        </form>
-    
-        <table>
-            <thead>
-                <tr>
-                    <th>Фото</th>
-                    <th>ПІБ</th>
-                    <th>Група</th>
-                    <th>Оцінка</th>
-                    <th>Практика</th>
-                    <th>Дії</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="student in filteredStudents" :key="student._id">
-                    <td>
-                        <img v-if="student.photo" :src="student.photo" alt="Фото студента" width="50">
-                        <img v-else src="default_photo_url" alt="Фото відсутнє" width="50">
-                    </td>
-                    <td><span :class="{ 'highlighted-text': student.highlighted }">{{ student.name }}</span></td>
-                    <td><span :class="{ 'highlighted-text': student.highlighted }">{{ student.group }}</span></td>
-                    <td>{{ student.mark }}</td>
-                    <td>
-                        <input type="checkbox" v-model="student.isDonePr">
-                    </td>
-                    <td>
-                        <a @click="removeStudent(student._id)" href="#">Видалити</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
     </div>
 
-<script src="main.js"></script>
+<!-- <script src="main.js"></script> -->
+<script src="main.js" defer></script>
 </body>
 </html>
