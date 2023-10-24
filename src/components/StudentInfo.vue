@@ -1,6 +1,6 @@
 <template> 
-    {{ student.name }} 
-    <img v-bind:src="student.photo" >
+    <span class="sname">{{ student.name }}</span> 
+    <img class="sphoto" v-bind:src="student.photo" >
 </template> 
  
 <script> 
@@ -24,4 +24,10 @@ export default {
 </script> 
  
 <style scoped>
+    .sname{
+        color: white;
+    }
+    .sphoto{
+        margin-left: 20%;
+    }
 </style>
