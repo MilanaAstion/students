@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div :class="themeClass" class="divcont">
+    <label for="themeCheckbox">Змінити тему (світла/темна)</label>
+    <input  type="checkbox" v-model="darkModeEnabled" @change="toggleTheme">
+    <label >Кількість студентів: {{studentsCount}}</label>
     <label for="search" class="search">Пошук:</label>
     <input type="text" v-model="search" placeholder="Пошук за прізвищем">
     <h2 class="add">Додати нового студента</h2>
@@ -83,10 +86,12 @@
 
 <script>
 import axios from 'axios';
+import { mapGetters } from 'vuex';
 
 export default {
   data() {
     return {
+      darkModeEnabled: true,
       search: '',
       newStudent: {
         name: '',
@@ -100,19 +105,40 @@ export default {
       default_photo_url: 'default_photo.jpg',
     };
   },
+  mounted(){
+    axios.get("http://34.82.81.113:3000/students").then((res)=>{
+      this.students = res.data;
+      console.log(this.students.length);
+      this.$store.commit('setCount', this.students.length); 
+    })
+  },
   created() {
     this.fetchStudents();
   },
-  computed: {
-    filteredStudents() {
+   computed: {
+     ...mapGetters(['getSelectedTheme']),
+    themeClass() {
+      return this.getSelectedTheme;
+    },
+     filteredStudents() {
       const searchTerm = this.search.toLowerCase();
       return this.students.map((student) => {
         const highlighted = searchTerm && student.name.toLowerCase().includes(searchTerm);
         return { ...student, highlighted };
       });
     },
+    studentsCount () {
+      return this.$store.getters.getCount;
+    }
   },
   methods: {
+    toggleTheme() {
+    if (this.darkModeEnabled) {
+      this.$store.commit('setTheme', 'dark-theme');
+    } else {
+      this.$store.commit('setTheme', 'light-theme');
+    }
+    },
     fetchStudents() {
       axios
         .get('http://34.82.81.113:3000/students')
